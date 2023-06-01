@@ -21,7 +21,7 @@ project description
 ```bash
   flutter pub get updates
 ```
-5- Run Unibuy
+5- Run [project]
 ```bash
   flutter run
 ```
@@ -29,7 +29,7 @@ project description
 
 ## Tech Stack
 
-**Client:** Flutter, provider, get_it, freezed
+**Client:** Flutter, cubit, get_it, freezed
 
 
 
