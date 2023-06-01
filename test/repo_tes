@@ -1,0 +1,66 @@
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:mockito/annotations.dart';
+// import 'package:mockito/mockito.dart';
+// import 'package:project_name/data/models/packages/packages_response.dart';
+// import 'package:project_name/data/repositories/packages_repo.dart';
+// import 'package:project_name/data/sources/network/result/network_error.dart';
+// import 'package:project_name/data/sources/network/result/result.dart';
+// import 'packages_repo_test.mocks.dart';
+//
+// class PackagesRepoTest extends Mock implements PackagesRepository {}
+//
+// @GenerateMocks([PackagesRepoTest])
+// Future<void> main() async {
+//   late MockPackagesRepoTest packagesRepo;
+//   setUpAll(() => () {
+//         packagesRepo = MockPackagesRepoTest();
+//       });
+//
+//   test(
+//       "getting data success",
+//       () => () async {
+//             final packagesResponse = PackagesResponse();
+//             when(packagesRepo.getPackages()).thenAnswer((realInvocation) async {
+//               return Result.success(packagesResponse);
+//             });
+//             final res = await packagesRepo.getPackages();
+//             expect(res, isA<PackagesResponse>());
+//             expect(res, packagesResponse);
+//           });
+//
+//   test(
+//       "getting data failure connectivity",
+//       () => () async {
+//             const error = NetworkError.connectivity();
+//             when(packagesRepo.getPackages()).thenAnswer((realInvocation) async {
+//               return const Result.failure(error);
+//             });
+//             final res = await packagesRepo.getPackages();
+//             expect(res, isA<NetworkError>());
+//             expect(res, error);
+//           });
+//
+//   test(
+//       "getting data failure request",
+//       () => () async {
+//             const error = NetworkError.request(errorMessage: "error");
+//             when(packagesRepo.getPackages()).thenAnswer((realInvocation) async {
+//               return const Result.failure(error);
+//             });
+//             final res = await packagesRepo.getPackages();
+//             expect(res, isA<NetworkError>());
+//             expect(res, error);
+//           });
+//
+//   test(
+//       "getting data failure type",
+//       () => () async {
+//             const error = NetworkError.type();
+//             when(packagesRepo.getPackages()).thenAnswer((realInvocation) async {
+//               return const Result.failure(error);
+//             });
+//             final res = await packagesRepo.getPackages();
+//             expect(res, isA<NetworkError>());
+//             expect(res, error);
+//           });
+// }
