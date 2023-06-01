@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_name/ui/screens/cubit/home/home_cubit.dart';
 import '../../data/models/entries/entries_response.dart';
-import '../../providers/home_provider.dart';
-import '../../utils/network_status.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,53 +13,59 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
+    context.read<HomeCubit>().getEntries();
     super.initState();
-    context.read<HomeProvider>().getEntries();
   }
 
   @override
   Widget build(BuildContext context) {
-    NETWORK_STATUS _status = context.watch<HomeProvider>().status;
-
-    switch (_status) {
-      case NETWORK_STATUS.IDLE:
-        return const Scaffold(
-          body: Center(
-            child: Text("IDLE"),
-          ),
-        );
-      case NETWORK_STATUS.LOADING:
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      case NETWORK_STATUS.SUCCESS:
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: _listener,
+      builder: (context, state) {
         return Scaffold(
-          body: Center(
+          appBar: AppBar(
+            title: const Text('Home'),
+          ),
+          body: state is HomeLoaded
+              ? Center(
             child: EntriesListWidget(
-              list: context.read<HomeProvider>().entriesResponse.entries!,
+              list: state.entriesResponse.entries!,
             ),
-          ),
-        );
-      case NETWORK_STATUS.ERROR:
-        return Scaffold(
-          body: Center(
-            child: Text(context
-                    .watch<HomeProvider>()
-                    .networkError
-                    ?.localizedErrorMessage ??
+          )
+              : state is HomeError
+              ? Center(
+            child: Text(state.networkError.localizedErrorMessage ??
                 'Undefined error'),
-          ),
+          )
+              : state is HomeLoading
+              ? const Center(
+            child: CircularProgressIndicator(),
+          )
+              : const SizedBox()
         );
+      },
+    );
+  }
+
+  // Widget _buildBody(var state) {
+  //
+  // }
+
+  void _listener(BuildContext context, HomeState state) {
+    if (state is HomeLoaded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Data is loaded'),
+        ),
+      );
     }
   }
 }
 
 class EntriesListWidget extends StatelessWidget {
-  List<Entry> list;
+  final List<Entry> list;
 
-  EntriesListWidget({Key? key, required this.list}) : super(key: key);
+  const EntriesListWidget({Key? key, required this.list}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

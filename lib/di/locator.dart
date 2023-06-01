@@ -1,13 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:project_name/domain/home/repo/entries_repository.dart';
 
-import '../data/repositories/entries_repo.dart';
+import '../data/repositories/entries_repo_impl.dart';
+import '../domain/home/usecase/home_usecase.dart';
 
 final locator = GetIt.instance;
 
 void setup() {
   locator.registerLazySingleton<Dio>(() => getDioClient());
-  locator.registerLazySingleton<EntriesRepository>(() => EntriesRepository());
+
+  // Repositories
+  locator
+      .registerLazySingleton<EntriesRepository>(() => EntriesRepositoryImpl());
+
+  // UseCases
+  locator.registerLazySingleton<HomeUseCase>(() => HomeUseCase(locator()));
 }
 
 Dio getDioClient() {
